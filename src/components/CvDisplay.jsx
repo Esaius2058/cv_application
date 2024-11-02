@@ -1,4 +1,4 @@
-const CvDisplay = ({ personalData, workList, onDelete }) => {
+const CvDisplay = ({ personalData, workList, educationList, onDeleteWork, onDeleteEducation, onEditWork, onEditEducation }) => {
   const CvPersonalData = ({ data }) => {
     return (
       <div className="personal-entries">
@@ -13,16 +13,10 @@ const CvDisplay = ({ personalData, workList, onDelete }) => {
     );
   };
 
-  const handleDelete = (id) => {
-    workList.filter((entry) => {
-      entry.id !== id;
-    });
-  }
-
   const CvWorkList = ({ data }) => {
     return (
       <div className="work-entries">
-        {data && data.map((entry, index) => {
+        {data && data.map((entry) => {
           return (
           <div key={entry.id}>
             <div>
@@ -37,12 +31,33 @@ const CvDisplay = ({ personalData, workList, onDelete }) => {
               </p>
             )}
             </div>
-            <button type="button" onClick={() => onDelete(entry.id)}>Delete</button>
+            <button type="button" onClick={() => onDeleteWork(entry.id)}>Delete</button>
+            <button type="button" onClick={() => onEditWork(entry.id)}>Edit</button>
           </div>)
         })}
       </div>
     );
   };
+
+  const CvEducationList = ({data}) => {
+    return(
+      <div className="education-entries">
+        {data && data.map((entry) => {
+          return(
+            <div key={entry.id}>
+              <div>
+                <h3>{entry.course}</h3>
+                <p><span>Institution: </span>{entry.institution}</p>
+                <p><span>Duration: </span>{entry.duration.start} - {entry.duration.end}</p>
+              </div>
+              <button type="button" onClick={() => onDeleteEducation(entry.id)}>Delete</button>
+              <button type="button" onClick={() => onEditEducation(entry.id)}>Edit</button>
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
 
   return (
     <div className="cv-display">
@@ -51,6 +66,9 @@ const CvDisplay = ({ personalData, workList, onDelete }) => {
       </div>
       <div className="work-entries">
         <CvWorkList data={workList} />
+      </div>
+      <div className="education-entries">
+        <CvEducationList data={educationList} />
       </div>
     </div>
   );
