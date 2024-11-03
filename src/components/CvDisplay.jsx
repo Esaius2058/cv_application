@@ -1,13 +1,15 @@
-const CvDisplay = ({ personalData, workList, educationList, onDeleteWork, onDeleteEducation, onEditWork, onEditEducation }) => {
+const CvDisplay = ({ personalData, workList, educationList, skillList, onDeleteWork, onDeleteEducation, onEditWork, onEditEducation, onEditSkill}) => {
   const CvPersonalData = ({ data }) => {
     return (
-      <div className="personal-entries">
-        <h1>{data.name}</h1>
-        <h3>{data.title}</h3>
-        <div className="contact-info">
-          <p>Contact: {data.contact}</p>
-          <p>Email: {data.email}</p>
-          <p>Address: {data.address}</p>
+      <div className="section">
+        <div className="cv-header">
+          <h1>{data.name}</h1>
+          <h2>{data.title}</h2>
+          <div className="contact-info">
+            <p>Contact: {data.contact}</p>
+            <p>Email: {data.email}</p>
+            <p>Address: {data.address}</p>
+          </div>
         </div>
       </div>
     );
@@ -15,61 +17,91 @@ const CvDisplay = ({ personalData, workList, educationList, onDeleteWork, onDele
 
   const CvWorkList = ({ data }) => {
     return (
-      <div className="work-entries">
-        {data && data.map((entry) => {
-          return (
-          <div key={entry.id}>
-            <div>
-            <h3>{entry.company}</h3>
-            <h4>{entry.position}</h4>
-            <p>
-              {entry.duration.start} - {entry.duration.end}
-            </p>
-            {entry.tasks && (
-              <p>
-                {entry.tasks}
-              </p>
-            )}
+      <div className="section">
+        <h3>Work Experience</h3>
+        {data && data.map((entry) => (
+          <div key={entry.id} className="work-entry">
+            <div className="entry-header">
+              <div>
+                <div className="company-name">{entry.company}</div>
+                <div className="position-title">{entry.position}</div>
+                <div className="duration">
+                  {entry.duration.start} - {entry.duration.end}
+                </div>
+              </div>
             </div>
-            <button type="button" onClick={() => onDeleteWork(entry.id)}>Delete</button>
-            <button type="button" onClick={() => onEditWork(entry.id)}>Edit</button>
-          </div>)
-        })}
+            {entry.tasks && (
+              <div className="tasks">{entry.tasks}</div>
+            )}
+            <div className="action-buttons">
+              <button type="button" onClick={() => onEditWork(entry.id)} className="edit-button">
+                Edit
+              </button>
+              <button type="button" onClick={() => onDeleteWork(entry.id)} className="delete-button">
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     );
   };
 
   const CvEducationList = ({data}) => {
-    return(
-      <div className="education-entries">
-        {data && data.map((entry) => {
-          return(
-            <div key={entry.id}>
+    return (
+      <div className="section">
+        <h3>Education</h3>
+        {data && data.map((entry) => (
+          <div key={entry.id} className="education-entry">
+            <div className="entry-header">
               <div>
-                <h3>{entry.course}</h3>
-                <p><span>Institution: </span>{entry.institution}</p>
-                <p><span>Duration: </span>{entry.duration.start} - {entry.duration.end}</p>
+                <div className="course-title">{entry.course}</div>
+                <div className="institution-name">{entry.institution}</div>
+                <div className="duration">
+                  {entry.duration.start} - {entry.duration.end}
+                </div>
               </div>
-              <button type="button" onClick={() => onDeleteEducation(entry.id)}>Delete</button>
-              <button type="button" onClick={() => onEditEducation(entry.id)}>Edit</button>
             </div>
-          )
-        })}
+            <div className="action-buttons">
+              <button type="button" onClick={() => onEditEducation(entry.id)} className="edit-button">
+                Edit
+              </button>
+              <button type="button" onClick={() => onDeleteEducation(entry.id)} className="delete-button">
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
-    )
-  }
+    );
+  };
+
+  const CvSkillList = ({data}) => {
+    return (
+      <div className="section">
+        <h3>Skills</h3>
+        <div className="skills-section">
+          {data && data.map((entry, index) => (
+            <span key={`skill-${index}`} className="skill">
+              {entry}
+            </span>
+          ))}
+        </div>
+        <div className="action-buttons">
+          <button type="button" onClick={onEditSkill} className="edit-button">
+            Edit Skills
+          </button>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="cv-display">
-      <div className="personal-details">
-        <CvPersonalData data={personalData} />
-      </div>
-      <div className="work-entries">
-        <CvWorkList data={workList} />
-      </div>
-      <div className="education-entries">
-        <CvEducationList data={educationList} />
-      </div>
+      <CvPersonalData data={personalData} />
+      <CvWorkList data={workList} />
+      <CvEducationList data={educationList} />
+      <CvSkillList data={skillList} />
     </div>
   );
 };
